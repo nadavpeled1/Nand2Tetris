@@ -13,5 +13,17 @@ CHIP Bit {
     OUT out;
 
     PARTS:
-    //// Replace this comment with your code.
+    //if load is on, choose 'in' to the DFF:
+    Mux(a=dffout, b=in, sel=load, out=muxout);
+    DFF(in=muxout, out=dffout);
+    //we want to use the dffout for OUT out aswell (we could also use OR gate):
+    Or(a=dffout, out=dffout, out=out);
+/*  
+    this version also works, andI want 
+    to check how is it possible to out 2 streams of the DFF
+    is it like getting another "cable" out of it?
+    Mux(a=dffout, b=in, sel=load, out=muxout);
+    DFF(in=muxout, out=dffout, out=out);
+*/
+
 }
