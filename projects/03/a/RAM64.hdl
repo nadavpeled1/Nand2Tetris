@@ -13,5 +13,20 @@ CHIP RAM64 {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+    DMux8Way(in=load,sel=address[3..5],a=load0,b=load1,c=load2,d=load3,e=load4,f=load5,g=load6,h=load7);
+    //This DMux using adress[3..5] to choose which Ram8 will get the adress[0..2]
+    //Then in the Ram8 handles the picking out of the 8Registers in it acording to the DMux loads out
+    //Practicly, the DMux will output 8 outs representing which register is relevat
+    // and with the adress 3..5 we select the relevant ram8
+    RAM8(in=in, load=load0, address=address[0..2], out=out1);
+    RAM8(in=in, load=load1, address=address[0..2], out=out2);
+    RAM8(in=in, load=load2, address=address[0..2], out=out3);
+    RAM8(in=in, load=load3, address=address[0..2], out=out4);
+    RAM8(in=in, load=load4, address=address[0..2], out=out5);
+    RAM8(in=in, load=load5, address=address[0..2], out=out6);
+    RAM8(in=in, load=load6, address=address[0..2], out=out7);
+    RAM8(in=in, load=load7, address=address[0..2], out=out8);
+    //the mux8 helps us to choose the relevant RAM8 same as we did with the DMux
+    Mux8Way16(a=out0,b=out1,c=out2,d=out3,e=out4,f=out5,g=out6,h=out7,sel=address[3..5],out=out);
+
 }
