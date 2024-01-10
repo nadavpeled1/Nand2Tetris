@@ -30,14 +30,14 @@ CHIP Memory {
     //check the 2MSB of address to see which component is accessed
     //remember that after accessing the relevant one, we check load to see if we load to update
     //or keeping the current one
-
-    DMux4Way(in=load, sel=address[13..14], a=loadram16k, b=loadscreen, c=loadkeyboard, d=nothing);
+    
+    DMux4Way(in=load, sel=address[13..14], a=loadram16k, b=loadram16k, c=loadkeyboard, d=nothing);
 
     //each one of the components gets the appropriate bits of address:
     RAM16K(in=in ,load=loadram16k ,address=address[0..13] ,out=outram16k1 ) ;
     Screen(in=in ,load=loadscreen ,address=address[0..12] ,out=outscreen );
     Keyboard(out=outkeyboard);
 
-    //finally, we choose the out of the 3 options by the 2 msb of address
-    Mux4Way16(a=outram16k ,b=outscreen ,c=outkeyboard ,d=nothing ,sel=address[13..14] ,out=out );
+    //finally, we choose out of the 3 options by the 2 msb of address
+    Mux4Way16(a=outram16k ,b=outram16k ,c=outscreen ,d=outkeyboard ,sel=address[13..14] ,out=out );
 }

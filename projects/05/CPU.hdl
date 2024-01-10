@@ -32,5 +32,31 @@ CHIP CPU {
         pc[15];          // Address of next instruction
 
     PARTS:
-    //// Replace this comment with your code.
+    //we are going to produce loadA, loadD, and writeM from the instruction bits
+    //C instruction or A instruction? come out from the instruction msb
+    //if the instruction is A instruction, the msb bit is 1, otherwise 0
+
+    DMux(in=true, sel=instruction[15], a=instA, b=instD);
+    Or(a=instA, b=instruction[5], out=loadRegA); // because it requires 0 or 1
+    And(a=instD, b=instruction[4], out=loadRegD);// because it requires 1 in both
+    
+    //Mux to feed register A:
+    Mux16(a=instruction, b=outALU, sel=instruction[15], out=feedA);
+    //a=0 or a=1? come out from the instruction msb
+    
+    ARegister(in=feedA, load=loadA, out=outA, out=addressM);
+
+    //Mux to feed ALU:
+    Mux16(a=inM, b=outA, sel=, out=outMuxALU);
+
+    //D register:
+    //produce loadD from the instruction bits
+    //if the instruction is C instruction, the msb bit is 1, otherwise 0
+    DRegister(in=outM, load=loadD, out=registerDout);
+
+    ALU(x=, y=, zx=, nx=, zy=, ny=, f=, no=, out=outM, zr=, ng=);
+
+    //PC:
+    PC(in=outA, load=, inc=, reset=reset, out=pc);
+
 }
